@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <title>{% block title %}{% endblock %} |라이언그램 </title>
+</head>
+<body class="container">
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+        <nav> <!-- 메뉴는 여기에만 있는게 아니라 다 있어서 base.html에 넣어주기 -->
+            <ul class="bottom-menu-group">
+                <li>
+                    <img src="{% static 'icons/home_outlined_black_36dp.svg' %}" alt="홈"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
+                </li>
+                <li>
+                    <img src="{% static 'icons/search_outlined_black_36dp.svg' %}" alt="검색"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
+                </li>
+                <li>
+                    <img src="{% static 'icons/add_box_outlined_black_36dp.svg' %}" alt="글쓰기"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
+                </li>
+                <li>
+                    <img src="{% static 'icons/favorite_outlined_black_36dp.svg' %}" alt="좋아요"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
+                </li>
+                <li>
+                    <img src="{% static 'icons/account_circle_outlined_black_36dp.svg' %}" alt="프로필"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>

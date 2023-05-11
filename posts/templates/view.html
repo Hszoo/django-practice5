@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- fbv 앞에 슬래시 없으면 현재 경로에서 들어가게 되니 붙여야 한다..? -->
+    <a href="/fbv/">새로고침</a><br> <!-- 현재 경로의 /fbv/로 이동 새로고침-->
+    <form action="" method="GET"> <!--GET은 데이터를 받을 때 사용 -->
+        <input type="text" name="var">
+        <input type="submit" varlue="GET제출">
+    </form>
+    
+    <form action="" method="POST"> {% csrf_token %} <!--POST는 데이터 추가 수정 삭제시 사용-->
+        <input type="text" name="var">
+        <input type="submit" varlue="POST제출">
+    </form>    
+</body>
+</html>
