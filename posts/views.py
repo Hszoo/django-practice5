@@ -1,21 +1,92 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, JsonResponse, Http404
 from django.views.generic.list import ListView # cbv 에서 listView쓰기 위해 받아옴
 from .models import Post # posts 앱 내(현재 views와 같은 경로상의) models 받아오기
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 def index(request) :
-    return render(request, 'index.html')
+    post_list = Post.objects.all().order_by('-create_at') # post 모델에 있는 모든 데이터 가져와라
+    context = {
+        'post_list' : post_list, 
+    }
+    return render(request, 'index.html', context)
+
 def post_list_view(request) :
-    return render(request, 'posts/post_list.html') # BASE-DIR로 위에 위에 즉 워크스페이스 / templates까지 지정해줬으니까 그 이하를 지정해주면 됨 
+    post_list = Post.objects.all() # post 모델에 있는 모든 데이터 가져와라
+    #post_list = Post.objects.filter(writer=request.user) # 모델 내 writer 가 현재 로그인한 사용자와 같은지 조회 
+    context = {
+        'post_list' : post_list, 
+    }
+    return render(request, 'posts/post_list.html', context) # BASE-DIR로 위에 위에 즉 워크스페이스 / templates까지 지정해줬으니까 그 이하를 지정해주면 됨 
+
 def post_detail_view(request, id) :
-    return render(request, 'posts/post_detail.html')
-def post_create_view(request, id) :
-    return render(request, 'posts/post_form.html')
-def post_update_view(request, id) :
-    return render(request, 'posts/post_form.html')
+    try:
+        post = Post.objects.get(id=id) # 더보기 페이지에서 url 템플릿으로 먹이려면, id값도 넘겨줘야할텐데 그떄 id넘기기 위해서는 여기 context 넘겨줘야됨.. 
+    # 존재하지 않는 페이지 입력받아 예외발생하면 
+    except Post.DoesNotExist:
+        return redirect('index') # 홈으로 redirect 
+    context = {
+        'post' : post,
+    }
+    return render(request, 'posts/post_detail.html', context)
+
+@login_required # 아래 함수실행 전에 실행되어, 로그인 상태에서만 아래 함수가 실행 되도록  
+def post_create_view(request) :
+    if request.method == 'GET' :
+        return render(request, 'posts/post_form.html')
+    else :
+        image = request.FILES.get('image')
+        content = request.POST.get('content')
+        print(image)
+        print(content)
+
+        # 사용자가 입력한 file과 content data 객체로 추가하기 
+        Post.objects.create(
+            image=image,
+            content=content,
+            #writer=request.user
+        )
+        return redirect('index')
+
+@login_required
+def post_update_view(request, id) : # url 패턴에 <int:id> 해놔서 id값 가져오기 가능 / urls에서 이거 안해놓으면 당연히 못가져오겠져    
+    #post = get_object_or_404(Post, id=id, writer=request.user) writer로 받는 값이 없어도 에러 발생시키는 구문 # 모델, id prameter
+    post = Post.objects.get(id = id) # 특정 id값의 post 객체를 받음 
+
+    if request.user != post.writer :
+        raise Http404('잘못된 접근입니다.') # 로그인한 사용자와 작성자가 다르면 에러 
+    
+    if request.method == 'GET' :
+        context = { 'post':post }
+        return render(request, 'posts/post_form.html', context)
+    elif request.method == 'POST' :
+        new_image = request.FILES.get('image')
+        content = request.POST.get('content')
+        print(new_image)
+        print(content)
+
+        if new_image : 
+            post.image.delete() #기존의 이미지는 삭제해서 중복된 이미지 쌓이지 않도록 
+            post.image = new_image # 수정된 이미지와 content로 변경 
+        post.content = content 
+        post.save()
+        return redirect('posts:post-detail', post.id)
+
+@login_required
 def post_delete_view(request, id) :
-    return render(request, 'posts/post_delete.html')
+    
+    post = get_object_or_404(Post, id=id) # 모델, id prameter
+    if request.user != post.writer :
+        raise Http404('잘못된 접근입니다.') # 로그인한 사용자와 작성자가 다르면 에러 
+    
+    if request.method == 'GET':
+        context = {'post' : post}
+        return render(request, 'posts/post_confirm_delete.html', context)
+    else:
+        post.delete()
+        return render('index')
 
 def url_view(request) :
     print('url_view 함수 실행중 ')
@@ -56,4 +127,3 @@ class class_view(ListView) : # 매개변수 listView는 import 해줘야 사용 
 def function_view_list(request) :
     object_list = Post.objects.all().order_by('-id')
     return render(request, 'cbv_view.html', {'object List' : object_list})
-    

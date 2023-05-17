@@ -14,16 +14,20 @@
         {% block content %}
         {% endblock %}
     </div>
-        <nav> <!-- 메뉴는 여기에만 있는게 아니라 다 있어서 base.html에 넣어주기 -->
+        <nav> <!-- 메뉴는 여기에만 있는게 어떤 페이지에서도 적용되어야 함-> base.html에 넣어주기 -->
             <ul class="bottom-menu-group">
                 <li>
-                    <img src="{% static 'icons/home_outlined_black_36dp.svg' %}" alt="홈"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
+                    <a href="{% url 'index' %}">
+                        <img src="{% static 'icons/home_outlined_black_36dp.svg' %}" alt="홈"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
+                    </a>
                 </li>
                 <li>
                     <img src="{% static 'icons/search_outlined_black_36dp.svg' %}" alt="검색"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
                 </li>
                 <li>
-                    <img src="{% static 'icons/add_box_outlined_black_36dp.svg' %}" alt="글쓰기"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
+                    <a href="{% url 'posts:post-create' %}">
+                        <img src="{% static 'icons/add_box_outlined_black_36dp.svg' %}" alt="글쓰기"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->
+                    </a>
                 </li>
                 <li>
                     <img src="{% static 'icons/favorite_outlined_black_36dp.svg' %}" alt="좋아요"/> <!--base-dir/static경로 지정해놨으니까 이 기준 상대경로 지정해주면됨-->

@@ -4,7 +4,11 @@
 {% block content %}
 <main>
     <div class="card-list"> <!-- card 리스트 안에 카드 여러개 만들었는데-->
-        {% include 'mixin/posts/post_card.html' %} <!-- include해서 파일 가져다가 쓸 수도 있음 (경로참고)-->
+        {% for post in post_list %}
+            {% include 'mixin/posts/post_card.html' with detail=False %} <!-- include해서 파일 가져다가 쓸 수도 있음 (경로참고)-->
+            <!-- list는 detail페이지가 아니므로, detail =False로 해줘서, 더보기 버튼 보이도록 함 -->
+        {% endfor %}
+        
     </div>
 </main>
 {% endblock %}

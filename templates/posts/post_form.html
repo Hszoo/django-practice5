@@ -1,6 +1,34 @@
 {% extends 'base.html' %} <!-- 상속받겠다ㅣ -->
 {% block title %}.post_detail화면 {% endblock %}
+
 {% block content %}
 <h1>post-detail화면</h1>
+<!-- 업데이트 할때는 폼 태그 내 action을 create로 하면안됨, 수정마다 중복데이터 발생하므로 -->
+<form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %} <!-- 파일 보낼때 enctype="multipart/form-data" 인코딩지정 -->
+    <!--                ㄴ  이거, posts 앱 내 urls 에 name='post-create' 로 이동한다 의미 -->
+    <!-- 서버가 응답해준 것이라는 것 보여주는 토큰 --> 
+    <div>
+        <label for="id_image">이미지</label>
+        <!-- 입력한 이미지가 있을때만 현재, 변경 이미지 표시 / else 에는 이미지 선택만 할 수 있도록 -->
+        {% if post.image %}
+            <p>현재 : <a href="{{ post.iamge.url }}">{{ post.image.name }} </a></p>
+            <p>변경 : <input type="file" name="image" accept="image/*" id="id_image"></p>
+        {% else %}
+            <input type="file" name="image" accept="image/*" id="id_image">
+        {% endif %}
+            <!-- input 태그 앞에는 label태그로 설명해주기 -->
+    </div>
+    <div>
+        <label for="id_content">내용</label>
+        <!-- post가 있을 때만 내용 띄우도록 -->
+        <textarea name="content" id="id_content" cols="30" rows="10">
+            {% if post %}
+                {{ post.content }}
+            {% endif %}
+        </textarea>
+    </div>
+    <div>
+        <input type="submit">
+    </div>
+</form>
 {% endblock %}
-
