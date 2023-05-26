@@ -14,7 +14,7 @@
             
     </div>        
     <div class="card__body">
-        </div>
+        <div>
             <!-- 이미지가 없는 경우도 있어서 조건문 -->
             {% if post.image %}
                 <img class="card__image" src="{{ post.image.url }}" alt="">
@@ -24,12 +24,12 @@
         </div>
         <div class="card__btn-group">
             <div>
-                <img class="card__btn" src="{% static 'icons/favorite_outlined_black_36dp.svg'}" alt="">
-                <img class="card__btn" src="{% static 'icons/mode_comment_outlined_black_36dp.svg'}" alt="">
-                <img class="card__btn" src="{% static 'icons/send_outlined_black_36dp.svg'}" alt="">
+                <img class="card__btn" src="{% static 'icons/favorite_outlined_black_36dp.svg' %}" alt="">
+                <img class="card__btn" src="{% static 'icons/mode_comment_outlined_black_36dp.svg' %}" alt="">
+                <img class="card__btn" src="{% static 'icons/send_outlined_black_36dp.svg' %}" alt="">
             </div>
             <div>
-                <img class="card__btn" src="{% static 'icons/bookmark_outlined_black_36dp.svg'}" alt="">
+                <img class="card__btn" src="{% static 'icons/bookmark_outlined_black_36dp.svg' %}" alt="">
             </div>
         </div>
         <div class="card_content">

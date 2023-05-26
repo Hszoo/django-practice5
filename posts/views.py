@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, Http404
 from django.views.generic.list import ListView # cbv 에서 listView쓰기 위해 받아옴
-from .models import Post # posts 앱 내(현재 views와 같은 경로상의) models 받아오기
 from django.contrib.auth.decorators import login_required
-
+from .models import Post # posts 앱 내(현재 views와 같은 경로상의) models 받아오기
+from .forms import PostBaseForm, PostCreateForm, PostDetailForm
 # Create your views here.
 
 def index(request) :
@@ -29,6 +29,7 @@ def post_detail_view(request, id) :
         return redirect('index') # 홈으로 redirect 
     context = {
         'post' : post,
+        'form' : PostDetailForm(),
     }
     return render(request, 'posts/post_detail.html', context)
 
@@ -48,6 +49,25 @@ def post_create_view(request) :
             content=content,
             #writer=request.user
         )
+        return redirect('index')
+    
+def post_create_form_view(request) :
+    if request.method == 'GET' :
+        form = PostCreateForm() # GET으로 폼 제공시에는 인수 없음 
+        context = {'form' : form}
+        return render(request, 'posts/post_form2.html', context)
+    
+    else :
+        form = PostCreateForm(request.POST, request.FILES) # POST로 사용자가 입력한 데이터를 가져와 \
+        if form.is_valid() : # 장고 폼에서 데이터들이 적합한지 판단할 수 있음  
+            Post.objects.create( # 적합하다면 각각을 저장한다. 
+            # cleaned_data : 폼에 작성된 필드 타입 기반으로, 각 데이터가 유효성 검사를 거치게 됨 
+                image=form.cleaned_data['image'],
+                content=form.cleaned_data['content'],
+                writer=request.user
+        )
+        else :
+            return redirect('posts:post-create') # 유효성 검사 실패하면 다시 폼으로 넘어가게 
         return redirect('index')
 
 @login_required

@@ -14,8 +14,10 @@ urlpatterns = [  #이것도 리스트이니까 마지막에 콤마 꼭 찍기
     path('fbv/', function_view),
     path('cbv/', class_view.as_view()), #class_view는 클래스라 as_view로 실행해줘야됨
     path('', index, name='index'),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
     path('posts/', include('posts.urls', namespace='posts')),
     path('__debug__', include('debug_toolbar.urls')),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

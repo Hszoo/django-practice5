@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'posts',
     'debug_toolbar',
+    'users',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +139,5 @@ INTERNAL_IPS = [
     "127.0.0.1"
     # ...
 ]
+
+AUTH_USER_MODEL = 'users.User'
